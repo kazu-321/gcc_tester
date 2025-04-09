@@ -10,3 +10,4 @@ dir=$(dirname "$file")
 base=$(basename "$file" .c)
 mkdir -p "$dir/build"
 gcc "$file" -o "$dir/build/$base"
+./"$dir/build/$base"
