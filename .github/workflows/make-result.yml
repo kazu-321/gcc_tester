@@ -37,6 +37,7 @@ jobs:
               rm -f "$folder/result.md"
             fi
             touch "$folder/result.md"
+            echo "$folder/result.md"
           done
       
       - name: Find and run tests for all .c files and output results in MD by directory
@@ -44,7 +45,7 @@ jobs:
           find . -type f -name '*.c' | sort | while read file; do
             folder=$(dirname "$file")
             echo "# $(basename "$file")" >> "$folder/result.md"
-            echo "test: $file"
+            echo "test: $file ($folder) -> $folder/result.md"
             bash test.sh "$file" >> "$folder/result.md" || echo "Error running tests for $file" >> "$folder/result.md"
             echo "" >> "$folder/result.md"
           done
