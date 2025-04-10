@@ -1,4 +1,4 @@
-name: Test Changed C Files
+name: Test Changed C Files and Related Tests
 
 on:
   push:
@@ -23,18 +23,33 @@ jobs:
       - name: Install build tools
         run: sudo apt-get update && sudo apt-get install -y build-essential
 
-      - name: Get changed C files
-        id: changes
+      - name: Get changed files and map to .c files
+        id: getfiles
         run: |
-          echo "CHANGED_FILES<<EOF" >> $GITHUB_ENV
-          git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '\.c$' || true >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
-
-      - name: Run tests on changed files
-        run: |
-          echo "$CHANGED_FILES" | while read file; do
-            if [ -f "$file" ]; then
-              echo "🧪 Testing $file ..."
-              bash run_tests.sh "$file"
+          echo "TARGET_FILES=" >> $GITHUB_ENV
+          git diff --name-only ${{ github.event.before }} ${{ github.sha }} | while read file; do
+            if [[ "$file" == *.c ]]; then
+              echo "対象Cファイル: $file"
+              echo "$file" >> changed_c_files.txt
+            elif [[ "$file" == */test/*input*.txt || "$file" == */test/*output*.txt ]]; then
+              # e.g., file = 0410/test/foo/input1.txt -> related_c = 0410/foo.c
+              dir=$(dirname "$file")
+              base=$(basename "$dir")     # e.g., foo
+              parent=$(dirname "$dir")    # e.g., 0410
+              related_c="$parent/${base}.c"
+              if [ -f "$related_c" ]; then
+                echo "テストファイル変更からの関連Cファイル: $related_c"
+                echo "$related_c" >> changed_c_files.txt
+              fi
             fi
+          done
+
+          sort -u changed_c_files.txt > unique_c_files.txt || true
+          echo "TARGET_FILES=$(paste -sd ' ' unique_c_files.txt)" >> $GITHUB_ENV
+
+      - name: Run tests
+        run: |
+          for file in $TARGET_FILES; do
+            echo "🧪 Testing $file ..."
+            bash run_tests.sh "$file"
           done
