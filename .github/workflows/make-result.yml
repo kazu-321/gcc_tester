@@ -18,14 +18,15 @@ jobs:
       - name: Install build tools
         run: sudo apt-get update && sudo apt-get install -y build-essential
 
-      - name: Find and run tests for all .c files and output results in MD by directory
+      - name: clean md
         run: |
-          # 各日付ディレクトリのresult.mdを初期化（例: 0409, 0410）
           for folder in $(find . -maxdepth 1 -type d -name "[0-9][0-9][0-9][0-9]"); do
             rm -f "$folder/result.md"
             touch "$folder/result.md"
           done
-          # 各.cファイルについて、親ディレクトリ名を利用し結果を出力
+      
+      - name: Find and run tests for all .c files and output results in MD by directory
+        run: |
           find . -type f -name '*.c' | while read file; do
             folder=$(basename "$(dirname "$file")")
             echo "# $(basename "$file")" >> "$folder/result.md"
@@ -34,3 +35,11 @@ jobs:
             echo '```' >> "$folder/result.md"
             echo "" >> "$folder/result.md"
           done
+
+      - name: Commit generated md files
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add */result.md
+          git commit -m "Update test result md via workflow" || echo "No changes to commit"
+          git push
