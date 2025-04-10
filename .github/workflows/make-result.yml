@@ -53,9 +53,7 @@ jobs:
       - name: Generate PDF from md
         run: |
           for folder in $(find . -type f -name '*.c' -exec dirname {} \; | sort -u); do
-            if [ -f "$folder/result.md" ]; then
-              rm -f "$folder/result.pdf"
-            fi
+            echo "Generating PDF for $folder/result.md"
             pandoc "$folder/result.md" -o "$folder/result.pdf" --pdf-engine wkhtmltopdf -c style.css -f markdown+emoji --metadata title="$(basename "$folder") 実行結果" 
           done
         continue-on-error: true
