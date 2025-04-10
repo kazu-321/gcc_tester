@@ -52,30 +52,30 @@ for input in "$testdir"/input*.txt; do
     ./"$exe" < "$input" > temp_output.txt
 
     if diff -q temp_output.txt "$expected" > /dev/null; then
-        echo "  ✅ Test $num passed"
-        echo " 入力:"
+        echo "## ✅ Test $num passed"
+        echo "### 入力:"
         echo '```'
         echo $(cat "$input")
         echo '```'
 
-        echo " 出力:"
+        echo "### 出力:"
         echo '```'
         echo "$(cat temp_output.txt)"
         echo '```'
         ((pass++))
     else
-        echo "  ❌ Test $num failed"
-        echo " 入力:"
+        echo "## ❌ Test $num failed"
+        echo "### 入力:"
         echo '```'
         echo "$(cat "$input")"
         echo '```'
 
-        echo " 出力:"
+        echo "### 出力:"
         echo '```'
         echo "$(cat temp_output.txt)"
         echo '```'
 
-        echo " 期待:"
+        echo "### 期待:"
         echo '```'
         echo "$(cat "$expected")"
         echo '```'
@@ -85,8 +85,9 @@ done
 
 rm -f "$exe" temp_output.txt
 
+echo ""
 echo "=========================="
-echo "✅ Passed: $pass"
-echo "❌ Failed: $fail"
+echo "- ✅ Passed: $pass"
+echo "- ❌ Failed: $fail"
 
 exit $fail
