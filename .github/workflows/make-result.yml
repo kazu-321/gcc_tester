@@ -44,6 +44,7 @@ jobs:
           find . -type f -name '*.c' | sort | while read file; do
             folder=$(dirname "$file")
             echo "# $(basename "$file")" >> "$folder/result.md"
+            echo "test: $file"
             bash test.sh "$file" >> "$folder/result.md" || echo "Error running tests for $file" >> "$folder/result.md"
             echo "" >> "$folder/result.md"
           done
