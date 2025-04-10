@@ -22,8 +22,12 @@ jobs:
         env:
           TZ: Asia/Tokyo
         run: |
-          sudo apt-get update && sudo apt-get install -y build-essential
-          sudo apt-get install -y pandoc wkhtmltopdf fonts-ipafont fonts-ipaexfont && \
+          sudo apt-get update && sudo apt-get install -y \
+                gcc \
+                pandoc \
+                wkhtmltopdf \
+                fonts-ipafont \
+                fonts-ipaexfont && \
                 fc-cache -fv
 
       - name: clean md
