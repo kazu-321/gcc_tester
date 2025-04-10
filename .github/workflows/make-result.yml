@@ -5,13 +5,13 @@ on:
   push:
     paths:
       - 'run_tests.sh'
-      - '.github/workflows/test-all.yml'
+      - '.github/workflows/make-result.yml'
 
 permissions:
   contents: write # for commit result.md
   
 jobs:
-  make-result-md:
+  make-result:
     runs-on: ubuntu-latest
 
     steps:
