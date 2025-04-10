@@ -86,6 +86,7 @@ rm -f "$exe" temp_output.txt
 
 echo ""
 echo "=========================="
+echo ""
 echo "- ✅ Passed: $pass"
 echo "- ❌ Failed: $fail"
 
