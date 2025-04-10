@@ -32,7 +32,7 @@ jobs:
 
       - name: clean md
         run: |
-          for folder in $(find . -maxdepth 1 -type d -name "[0-9][0-9][0-9][0-9]"); do
+          for folder in $(find . -type f -name '*.c' -exec dirname {} \; | sort -u); do
             if [ -f "$folder/result.md" ]; then
               rm -f "$folder/result.md"
             fi
@@ -42,21 +42,19 @@ jobs:
       - name: Find and run tests for all .c files and output results in MD by directory
         run: |
           find . -type f -name '*.c' | sort | while read file; do
-            folder=$(basename "$(dirname "$file")")
+            folder=$(dirname "$file")
             echo "# $(basename "$file")" >> "$folder/result.md"
-            # echo '```' >> "$folder/result.md"
             bash test.sh "$file" >> "$folder/result.md" || echo "Error running tests for $file" >> "$folder/result.md"
-            # echo '```' >> "$folder/result.md"
             echo "" >> "$folder/result.md"
           done
       
       - name: Generate PDF from md
         run: |
-          for folder in $(find . -maxdepth 1 -type d -name "[0-9][0-9][0-9][0-9]"); do
+          for folder in $(find . -type f -name '*.c' -exec dirname {} \; | sort -u); do
             if [ -f "$folder/result.md" ]; then
               rm -f "$folder/result.pdf"
             fi
-            pandoc "$folder/result.md" -o "$folder/result.pdf" --pdf-engine wkhtmltopdf -c style.css -f markdown+emoji --metadata title="$folder 実行結果" 
+            pandoc "$folder/result.md" -o "$folder/result.pdf" --pdf-engine wkhtmltopdf -c style.css -f markdown+emoji --metadata title="$(basename "$folder") 実行結果" 
           done
         continue-on-error: true
 
