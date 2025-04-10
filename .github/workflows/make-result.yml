@@ -1,4 +1,4 @@
-name: Test All C Files
+name: Make Result
 
 on:
   workflow_dispatch:     # 手動実行用
