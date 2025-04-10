@@ -64,7 +64,7 @@ jobs:
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
-          git add */result.md
-          git add */result.pdf
+          git add **/result.md
+          git add **/result.pdf
           git commit -m "Update test result md via workflow" || echo "No changes to commit"
           git push origin main
