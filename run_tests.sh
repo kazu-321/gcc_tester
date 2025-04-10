@@ -24,7 +24,7 @@ if [ ! -d "$testdir" ]; then
     exit 1
 fi
 
-echo "🔧 Compiling $cfile ..."
+# echo "🔧 Compiling $cfile ..."
 exe="${cfilename}.out"
 gcc "$cfile" -o "$exe"
 
@@ -52,7 +52,7 @@ for input in "$testdir"/input*.txt; do
     ./"$exe" < "$input" > temp_output.txt
 
     if diff -q temp_output.txt "$expected" > /dev/null; then
-        echo "## ✅ Test $num passed"
+        echo "## Test $num passed"
         echo "### 入力:"
         echo '```'
         echo $(cat "$input")
@@ -64,7 +64,7 @@ for input in "$testdir"/input*.txt; do
         echo '```'
         ((pass++))
     else
-        echo "## ❌ Test $num failed"
+        echo "## Test $num failed"
         echo "### 入力:"
         echo '```'
         echo "$(cat "$input")"
