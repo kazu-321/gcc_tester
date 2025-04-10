@@ -51,5 +51,5 @@ jobs:
         run: |
           for file in $TARGET_FILES; do
             echo "🧪 Testing $file ..."
-            bash run_tests.sh "$file"
+            bash test.sh "$file"
           done
