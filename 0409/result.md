@@ -82,8 +82,38 @@ a: 4.560000   b: 1.230000
 - ❌ Failed: 0
 
 # exer2-2.c
-❌ Test directory not found: ./0409/test/exer2-2
-Error running tests for ./0409/exer2-2.c
+🔧 Compiling ./0409/exer2-2.c ...
+## ✅ Test 1 passed
+### 入力:
+```
+12
+```
+### 出力:
+```
+6
+```
+## ✅ Test 2 passed
+### 入力:
+```
+5
+```
+### 出力:
+```
+2
+```
+## ✅ Test 3 passed
+### 入力:
+```
+120
+```
+### 出力:
+```
+16
+```
+
+==========================
+- ✅ Passed: 3
+- ❌ Failed: 0
 
 # exer3-1.c
 ❌ Test directory not found: ./0409/test/exer3-1
