@@ -1,0 +1,26 @@
+name: Test All C Files
+
+on:
+  workflow_dispatch:     # 手動実行用
+  push:
+    paths:
+      - 'run_tests.sh'
+      - '.github/workflows/test-all.yml'
+
+jobs:
+  test-all:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install build tools
+        run: sudo apt-get update && sudo apt-get install -y build-essential
+
+      - name: Find and run tests for all .c files
+        run: |
+          find . -type f -name '*.c' | while read file; do
+            echo "🧪 Testing $file ..."
+            bash run_tests.sh "$file"
+          done
