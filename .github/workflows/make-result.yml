@@ -52,7 +52,7 @@ jobs:
             if [ -f "$folder/result.md" ]; then
               rm -f "$folder/result.pdf"
             fi
-            pandoc "$folder/result.md" -o "result/$folder.pdf" --pdf-engine wkhtmltopdf
+            pandoc "$folder/result.md" -o "$folder/result.pdf" --pdf-engine wkhtmltopdf --metadata title="Test Result"
           done
         continue-on-error: true
 
