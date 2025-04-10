@@ -11,7 +11,7 @@ permissions:
   contents: write # for commit result.md
   
 jobs:
-  test-all:
+  make-result-md:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,28 +24,19 @@ jobs:
       - name: clean md
         run: |
           for folder in $(find . -maxdepth 1 -type d -name "[0-9][0-9][0-9][0-9]"); do
-            rm -f "$folder/result.md"
-            touch "$folder/result.md"
+            rm -rf "result"
+            touch "result/$folder.md"
           done
       
       - name: Find and run tests for all .c files and output results in MD by directory
         run: |
           find . -type f -name '*.c' | sort | while read file; do
             folder=$(basename "$(dirname "$file")")
-            echo "# $(basename "$file")" >> "$folder/result.md"
-            # echo '```' >> "$folder/result.md"
-            bash run_tests.sh "$file" >> "$folder/result.md" || echo "Error running tests for $file" >> "$folder/result.md"
-            # echo '```' >> "$folder/result.md"
-            echo "" >> "$folder/result.md"
-          done
-
-      - name: Install pandoc
-        run: sudo apt-get update && sudo apt-get install -y pandoc texlive-latex-base
-
-      - name: Make PDF from md
-        run: |
-          for folder in $(find . -maxdepth 1 -type d -name "[0-9][0-9][0-9][0-9]"); do
-            pandoc "$folder/result.md" -o "$folder/result.pdf"
+            echo "# $(basename "$file")" >> "result/$folder.md"
+            # echo '```' >> "result/$folder.md"
+            bash run_tests.sh "$file" >> "result/$folder.md" || echo "Error running tests for $file" >> "result/$folder.md"
+            # echo '```' >> "result/$folder.md"
+            echo "" >> "result/$folder.md"
           done
 
       - name: Commit generated md files
@@ -56,3 +47,10 @@ jobs:
           git add */result.pdf
           git commit -m "Update test result md via workflow" || echo "No changes to commit"
           git push origin main
+
+  generate-pdf:
+    uses: nct-cherrypick/MarkdownToPDF/.github/workflows/GeneratePDF.yaml@main
+    with:
+      source-directory: './result'
+      output-directory: './result'
+      is-nest: true
