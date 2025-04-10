@@ -53,13 +53,15 @@ for input in "$testdir"/input*.txt; do
 
     if diff -q temp_output.txt "$expected" > /dev/null; then
         echo "  ✅ Test $num passed"
+        echo " 入力: \`\`\`$(cat "$input")\`\`\`"
+        echo " 出力: \`\`\`$(cat temp_output.txt)\`\`\`"
         ((pass++))
     else
         echo "  ❌ Test $num failed"
-        echo "    --- Expected ---"
-        cat "$expected"
-        echo "    --- Got ---"
-        cat temp_output.txt
+        echo " 入力: \`\`\`$(cat "$input")\`\`\`"
+        echo " 期待: \`\`\`$(cat "$expected")\`\`\`"
+        echo " 出力: \`\`\`$(cat temp_output.txt)\`\`\`"
+        # cat temp_output.txt
         ((fail++))
     fi
 done
