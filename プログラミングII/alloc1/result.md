@@ -34,13 +34,13 @@ num > str: aaaaa
 ### 出力:
 ```
 ---show_range(test, 2, 4)---
-*ptr+2: 55, ptr+2: 0x7ffcbc4db0b8
-*ptr+3: 22, ptr+3: 0x7ffcbc4db0bc
-*ptr+4: 75, ptr+4: 0x7ffcbc4db0c0
+*ptr+2: 55, ptr+2: 0x7ffce5a54a28
+*ptr+3: 22, ptr+3: 0x7ffce5a54a2c
+*ptr+4: 75, ptr+4: 0x7ffce5a54a30
 ---show_range(test, 1, 3)---
-*ptr+1: 60, ptr+1: 0x7ffcbc4db0b4
-*ptr+2: 55, ptr+2: 0x7ffcbc4db0b8
-*ptr+3: 22, ptr+3: 0x7ffcbc4db0bc
+*ptr+1: 60, ptr+1: 0x7ffce5a54a24
+*ptr+2: 55, ptr+2: 0x7ffce5a54a28
+*ptr+3: 22, ptr+3: 0x7ffce5a54a2c
 
 ```
 

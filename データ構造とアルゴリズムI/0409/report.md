@@ -1,6 +1,7 @@
 # exer1-1.c
 ## code
 ```c
+
 #include <stdio.h>
 
 int main() {
@@ -9,7 +10,9 @@ int main() {
     double x = (double)(a + b + c) / 3;
     printf("%.2f\n", x);
     return 0;
-}```
+}
+```
+## result
 ## ✅ Test 1 passed
 ### 入力:
 ```
@@ -49,6 +52,7 @@ int main() {
 # exer1-2.c
 ## code
 ```c
+
 #include <stdio.h>
 
 int main() {
@@ -60,7 +64,9 @@ int main() {
         printf("b: %lf   a: %lf\n", b, a);
     }
     return 0;
-}```
+}
+```
+## result
 ## ✅ Test 1 passed
 ### 入力:
 ```
@@ -90,6 +96,7 @@ a: 4.560000   b: 1.230000
 # exer2-1.c
 ## code
 ```c
+
 #include <stdio.h>
 
 int main() {
@@ -101,7 +108,9 @@ int main() {
         printf("\n");
     }
     return 0;
-}```
+}
+```
+## result
 ## ✅ Test  passed
 ### 入力:
 ```
@@ -129,6 +138,7 @@ int main() {
 # exer2-2.c
 ## code
 ```c
+
 #include <stdio.h>
 
 int main() {
@@ -142,7 +152,9 @@ int main() {
     }
     printf("%d\n", count);
     return 0;
-}```
+}
+```
+## result
 ## ✅ Test 1 passed
 ### 入力:
 ```
@@ -182,6 +194,7 @@ int main() {
 # exer3-1.c
 ## code
 ```c
+
 #include <stdio.h>
 
 int main() {
@@ -198,7 +211,9 @@ int main() {
         printf("三つの値は異なる\n");
     }
     return 0;
-}```
+}
+```
+## result
 ## ✅ Test 1 passed
 ### 入力:
 ```
@@ -258,6 +273,7 @@ int main() {
 # exer3-2.c
 ## code
 ```c
+
 #include <stdio.h>
 
 int main() {
@@ -273,7 +289,9 @@ int main() {
     }
     printf("\n");
     return 0;
-}```
+}
+```
+## result
 ## ✅ Test 1 passed
 ### 入力:
 ```
