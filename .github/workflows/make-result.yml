@@ -75,13 +75,21 @@ jobs:
       
       - name: Generate PDF from md
         run: |
-          for directory in $(find . -type f -name '*.c' -exec dirname {} \; | sort -u); do
+          for result in $(find . -type f -name 'result.md'); do
+            directory=$(dirname "$result")
             echo "Generating PDF for $directory/result.md"
             pandoc "$directory/result.md" -o "$directory/result.pdf" --pdf-engine wkhtmltopdf -c style.css -f markdown+emoji --metadata title="$(basename "$directory") 実行結果" 
+            rm -f "$directory/result.md"
+            echo "Generating PDF for $directory/report.md"
+          done
+          for report in $(find . -type f -name 'report.md'); do
+            directory=$(dirname "$report")
             echo "Generating PDF for $directory/report.md"
             pandoc "$directory/report.md" -o "$directory/report.pdf" --pdf-engine wkhtmltopdf -c style.css -f markdown+emoji --metadata title="$(basename "$directory") 実行結果"
+            rm -f "$directory/report.md"
+            echo "Generated PDF for $directory/report.md"
           done
-        continue-on-error: true
+          echo "All PDFs generated successfully." 
 
       - name: Commit generated md files
         run: |
