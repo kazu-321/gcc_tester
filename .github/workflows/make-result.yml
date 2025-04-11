@@ -27,6 +27,7 @@ jobs:
                 pandoc \
                 wkhtmltopdf \
                 fonts-ipafont \
+                python3 \
                 fonts-ipaexfont && \
                 fc-cache -fv
 
@@ -46,7 +47,7 @@ jobs:
             folder=$(dirname "$file")
             echo "# $(basename "$file")" >> "$folder/result.md"
             echo "test: $file ($folder) -> $folder/result.md"
-            bash test.sh "$file" >> "$folder/result.md" || echo "Error running tests for $file" >> "$folder/result.md"
+            python3 test.py "$file" >> "$folder/result.md" || echo "Error running tests for $file" >> "$folder/result.md"
             echo "" >> "$folder/result.md"
           done
       
