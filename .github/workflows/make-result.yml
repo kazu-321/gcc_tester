@@ -55,8 +55,11 @@ jobs:
             echo "# $(basename "$file")" >> "$directory/report.md"
             echo "## code" >> "$directory/report.md"
             echo '```c' >> "$directory/report.md"
+            echo "" >> "$directory/report.md"
             cat "$file" >> "$directory/report.md"
+            echo "" >> "$directory/report.md"
             echo '```' >> "$directory/report.md"
+            echo "## result" >> "$directory/report.md"
 
             touch "$directory/temp.md"
             python3 test.py "$file" >> "$directory/temp.md" || echo "Error running tests for $file" >> "$directory/temp.md"
