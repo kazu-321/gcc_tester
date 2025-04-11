@@ -37,13 +37,13 @@ jobs:
             if [ -f "$directory/result.md" ]; then
               rm -f "$directory/result.md"
             fi
-            if [ -f "$directory/report.pdf" ]; then
-              rm -f "$directory/report.pdf"
+            if [ -f "$directory/report.md" ]; then
+              rm -f "$directory/report.md"
             fi
             touch "$directory/result.md"
-            touch "$directory/report.pdf"
+            touch "$directory/report.md"
             echo "$directory/result.md"
-            echo "$directory/report.pdf"
+            echo "$directory/report.md"
           done
       
       - name: Find and run tests for all .c files and output results in MD by directory
