@@ -22,7 +22,7 @@ jobs:
         env:
           TZ: Asia/Tokyo
         run: |
-          sudo apt-get update && sudo apt-get install -y \
+          sudo apt-get update && sudo apt-get install -y --no-install-recommends \
                 gcc \
                 pandoc \
                 wkhtmltopdf \
@@ -53,6 +53,7 @@ jobs:
             echo "# $(basename "$file")" >> "$directory/result.md"
 
             echo "# $(basename "$file")" >> "$directory/report.md"
+            echo "## code" >> "$directory/report.md"
             echo "```c" >> "$directory/report.md"
             echo "$(cat "$file")" >> "$directory/report.md"
             echo "```" >> "$directory/report.md"
