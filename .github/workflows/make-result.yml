@@ -33,29 +33,49 @@ jobs:
 
       - name: clean md
         run: |
-          for folder in $(find . -type f -name '*.c' -exec dirname {} \; | sort -u); do
-            if [ -f "$folder/result.md" ]; then
-              rm -f "$folder/result.md"
+          for directory in $(find . -type f -name '*.c' -exec dirname {} \; | sort -u); do
+            if [ -f "$directory/result.md" ]; then
+              rm -f "$directory/result.md"
             fi
-            touch "$folder/result.md"
-            echo "$folder/result.md"
+            if [ -f "$directory/report.pdf" ]; then
+              rm -f "$directory/report.pdf"
+            fi
+            touch "$directory/result.md"
+            touch "$directory/report.pdf"
+            echo "$directory/result.md"
+            echo "$directory/report.pdf"
           done
       
       - name: Find and run tests for all .c files and output results in MD by directory
         run: |
           find . -type f -name '*.c' | sort | while read file; do
-            folder=$(dirname "$file")
-            echo "# $(basename "$file")" >> "$folder/result.md"
-            echo "test: $file ($folder) -> $folder/result.md"
-            python3 test.py "$file" >> "$folder/result.md" || echo "Error running tests for $file" >> "$folder/result.md"
-            echo "" >> "$folder/result.md"
+            directory=$(dirname "$file")
+            echo "# $(basename "$file")" >> "$directory/result.md"
+
+            echo "# $(basename "$file")" >> "$directory/report.md"
+            echo "```c" >> "$directory/report.md"
+            echo "$(cat "$file")" >> "$directory/report.md"
+            echo "```" >> "$directory/report.md"
+
+            touch "$directory/temp.md"
+            python3 test.py "$file" >> "$directory/temp.md" || echo "Error running tests for $file" >> "$directory/temp.md"
+
+            echo "$(cat "$directory/temp.md") " >> "$directory/result.md"
+            echo "$(cat "$directory/temp.md") " >> "$directory/report.md"
+
+            rm -f "$directory/temp.md"
+
+            echo "" >> "$directory/result.md"
+            echo "" >> "$directory/report.md"
           done
       
       - name: Generate PDF from md
         run: |
-          for folder in $(find . -type f -name '*.c' -exec dirname {} \; | sort -u); do
-            echo "Generating PDF for $folder/result.md"
-            pandoc "$folder/result.md" -o "$folder/result.pdf" --pdf-engine wkhtmltopdf -c style.css -f markdown+emoji --metadata title="$(basename "$folder") 実行結果" 
+          for directory in $(find . -type f -name '*.c' -exec dirname {} \; | sort -u); do
+            echo "Generating PDF for $directory/result.md"
+            pandoc "$directory/result.md" -o "$directory/result.pdf" --pdf-engine wkhtmltopdf -c style.css -f markdown+emoji --metadata title="$(basename "$directory") 実行結果" 
+            echo "Generating PDF for $directory/report.md"
+            pandoc "$directory/report.md" -o "$directory/report.pdf" --pdf-engine wkhtmltopdf -c style.css -f markdown+emoji --metadata title="$(basename "$directory") 実行結果"
           done
         continue-on-error: true
 
