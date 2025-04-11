@@ -1,4 +1,5 @@
 # exer1-1.c
+
 ## ✅ Test 1 passed
 ### 入力:
 ```
@@ -36,6 +37,7 @@
 - ❌ Failed: 0 
 
 # exer1-2.c
+
 ## ✅ Test 1 passed
 ### 入力:
 ```
@@ -63,6 +65,7 @@ a: 4.560000   b: 1.230000
 - ❌ Failed: 0 
 
 # exer2-1.c
+
 ## ✅ Test  passed
 ### 入力:
 ```
@@ -88,6 +91,7 @@ a: 4.560000   b: 1.230000
 - ❌ Failed: 0 
 
 # exer2-2.c
+
 ## ✅ Test 1 passed
 ### 入力:
 ```
@@ -125,6 +129,7 @@ a: 4.560000   b: 1.230000
 - ❌ Failed: 0 
 
 # exer3-1.c
+
 ## ✅ Test 1 passed
 ### 入力:
 ```
@@ -182,6 +187,7 @@ a: 4.560000   b: 1.230000
 - ❌ Failed: 0 
 
 # exer3-2.c
+
 ## ✅ Test 1 passed
 ### 入力:
 ```

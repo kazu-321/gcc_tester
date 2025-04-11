@@ -1,4 +1,5 @@
 # sample103-1.c
+
 ## ✅ Test 1 passed
 ### 入力:
 ```
@@ -26,6 +27,7 @@ num > str: aaaaa
 - ❌ Failed: 0 
 
 # sample103-2.c
+
 ## ✅ Test  passed
 ### 入力:
 ```
