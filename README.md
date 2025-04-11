@@ -1,9 +1,4 @@
----
-layout: none
-title: Contents
----
+# GCC_TESTER
+授業等でc言語で書かれたプログラムをテストしたりするやつ
 
-{% assign doclist = site.pages | sort: 'url'  %}
-  {% for doc in doclist %}
--     [{{ doc.name }}]({{ site.baseurl }}{{ doc.url }})
-  {% endfor %}
+実行結果をresult.pdfに、コードと実行結果をreport.pdfに出力します
