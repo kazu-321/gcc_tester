@@ -57,8 +57,8 @@ def main():
             i = 0
             offset = 0
             while i < len(temp_content):
-                if expected_content[i+offset:i+6+offset] == "/regix":
-                    # /regix()の中身を取得
+                if expected_content[i+offset:i+6+offset] == "/regex":
+                    # /regex()の中身を取得
                     pattern = expected_content[i+7+offset:expected_content.find(")", i+7+offset)]
                     match = re.search(pattern, temp_content[i:])
                     i += match.end()
