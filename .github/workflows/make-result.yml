@@ -112,6 +112,8 @@ jobs:
               echo "## PDF一覧" >> "$parent_directory/README.md"
 
               for sorted_report in $(find "$parent_directory" -type f -name 'report.pdf' | sort); do
+                echo "found report: $sorted_report"
+                echo "basename: $(basename "$sorted_report")"
                 echo "- [$(basename "$sorted_report")](./$(basename "$directory")/report.pdf)" >> "$parent_directory/README.md"
               done
             fi
