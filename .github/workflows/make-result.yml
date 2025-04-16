@@ -100,7 +100,7 @@ jobs:
               rm -f "$directory/README.md"
             fi
             touch "$directory/README.md"
-            echo "# $(basename "$directory")" > "$directory"
+            echo "# $(basename "$directory")" > "$directory/README.md"
             echo "## PDF一覧" >> "$directory/README.md"
             if [ ! -f "$directory/README.md" ]; then
               echo "# $(basename "$directory")" > "$directory/README.md"
