@@ -110,8 +110,11 @@ jobs:
               touch "$parent_directory/README.md"
               echo "# $(basename "$parent_directory")" >> "$parent_directory/README.md"
               echo "## PDF一覧" >> "$parent_directory/README.md"
+
+              for sorted_report in $(find "$parent_directory" -type f -name 'report.pdf' | sort); do
+                echo "- [$(basename "$sorted_report")](./$(basename "$directory")/report.pdf)" >> "$parent_directory/README.md"
+              done
             fi
-            echo "- [$(basename "$directory")](./$(basename "$directory")/report.pdf)" >> "$parent_directory/README.md"
           done
           
       - name: Commit generated md files
