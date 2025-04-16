@@ -90,6 +90,25 @@ jobs:
             echo "Generated PDF for $directory/report.md"
           done
           echo "All PDFs generated successfully." 
+      
+      - name: Update readme
+        run: |
+          for report in $(find . -type f -name 'report.pdf'); do
+            directory=$(dirname "$report")
+            echo "Updating README.md for $directory/report.pdf"
+            if [ -f "$directory/README.md" ]; then
+              rm -f "$directory/README.md"
+            fi
+            touch "$directory/README.md"
+            echo "# $(basename "$directory")" > "$directory"
+            echo "## PDF一覧" >> "$directory/README.md"
+            if [ ! -f "$directory/README.md" ]; then
+              echo "# $(basename "$directory")" > "$directory/README.md"
+              echo "## PDF一覧" >> "$directory/README.md"
+            fi
+            echo "- [$(basename "$report")]($report)" >> "$directory/README.md"
+          done
+          echo "README.md updated successfully."
 
       - name: Commit generated md files
         run: |
