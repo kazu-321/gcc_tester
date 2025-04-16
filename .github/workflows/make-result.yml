@@ -113,7 +113,7 @@ jobs:
 
               for sorted_report in $(find "$parent_directory" -type f -name 'report.pdf' | sort); do
                 echo "found report: $sorted_report"
-                echo "- [$(dirname "$sorted_report")]($(dirname "$sorted_report")/$(basename "$sorted_report"))" >> "$parent_directory/README.md"
+                echo "- [$(basename $(dirname "$sorted_report"))]($(dirname "$sorted_report")/$(basename "$sorted_report"))" >> "$parent_directory/README.md"
               done
             fi
           done
