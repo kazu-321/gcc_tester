@@ -1,3 +1,3 @@
 # プログラミングII
 ## PDF一覧
-- [alloc1](./alloc1/report.pdf)
+- [report.pdf](./alloc1/report.pdf)

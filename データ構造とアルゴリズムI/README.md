@@ -1,4 +1,4 @@
 # データ構造とアルゴリズムI
 ## PDF一覧
-- [0416](./0416/report.pdf)
-- [0409](./0409/report.pdf)
+- [report.pdf](./0416/report.pdf)
+- [report.pdf](./0416/report.pdf)
