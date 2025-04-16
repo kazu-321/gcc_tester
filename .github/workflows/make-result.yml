@@ -90,26 +90,30 @@ jobs:
             echo "Generated PDF for $directory/report.md"
           done
           echo "All PDFs generated successfully." 
+
+      - name: Clean README
+        run: |
+          for report in $(find . -type f -name 'report.pdf'); do
+            directory=$(dirname "$report")
+            parent_directory=$(dirname "$directory")
+            if [ -f "$parent_directory/README.md" ]; then
+              rm -f "$parent_directory/README.md"
+            fi
+          done
       
       - name: Update readme
         run: |
           for report in $(find . -type f -name 'report.pdf'); do
             directory=$(dirname "$report")
-            echo "Updating README.md for $directory/report.pdf"
-            if [ -f "$directory/README.md" ]; then
-              rm -f "$directory/README.md"
+            parent_directory=$(dirname "$directory")
+            if [ ! -f "$parent_directory/README.md" ]; then
+              touch "$parent_directory/README.md"
+              echo "# $(basename "$parent_directory")" >> "$parent_directory/README.md"
+              echo "## PDF一覧" >> "$parent_directory/README.md"
             fi
-            touch "$directory/README.md"
-            echo "# $(basename "$directory")" > "$directory/README.md"
-            echo "## PDF一覧" >> "$directory/README.md"
-            if [ ! -f "$directory/README.md" ]; then
-              echo "# $(basename "$directory")" > "$directory/README.md"
-              echo "## PDF一覧" >> "$directory/README.md"
-            fi
-            echo "- [$(basename "$report")]($report)" >> "$directory/README.md"
+            echo "- [$(basename "$directory")](./$(basename "$directory")/report.pdf)" >> "$parent_directory/README.md"
           done
-          echo "README.md updated successfully."
-
+          
       - name: Commit generated md files
         run: |
           git config --global user.name "github-actions"
