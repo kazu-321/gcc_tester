@@ -1,0 +1,4 @@
+---fill_alpha(5)---
+mystr: abcde
+---fill_alpha(20)---
+mystr: abcdefghijklmnopqrst
