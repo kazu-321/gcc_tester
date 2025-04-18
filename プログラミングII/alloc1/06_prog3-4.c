@@ -15,7 +15,6 @@ int main(void)
     mystr = fill_alpha(20);
     printf("mystr: %s\n", mystr);
     free(mystr);
-    
     return 0;
 }
 
