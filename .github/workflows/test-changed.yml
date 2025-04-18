@@ -27,6 +27,8 @@ jobs:
         id: getfiles
         run: |
           echo "TARGET_FILES=" >> $GITHUB_ENV
+          rm -f changed_c_files.txt
+          touch changed_c_files.txt
           git diff --name-only ${{ github.event.before }} ${{ github.sha }} | while read file; do
             if [[ "$file" == *.c ]]; then
               echo "対象Cファイル: $file"
