@@ -11,6 +11,7 @@ on:
       - '**/*.c'
       - '**/test/**/*.txt'
       - 'run_tests.sh'
+  workflow_dispatch:
 
 jobs:
   test-changed:
@@ -34,10 +35,9 @@ jobs:
               echo "対象Cファイル: $file"
               echo "$file" >> changed_c_files.txt
             elif [[ "$file" == */test/*input*.txt || "$file" == */test/*output*.txt ]]; then
-              # e.g., file = 0410/test/foo/input1.txt -> related_c = 0410/foo.c
               dir=$(dirname "$file")
-              base=$(basename "$dir")     # e.g., foo
-              parent=$(dirname "$dir")    # e.g., 0410
+              base=$(basename "$dir")
+              parent=$(dirname "$dir")
               related_c="$parent/${base}.c"
               if [ -f "$related_c" ]; then
                 echo "テストファイル変更からの関連Cファイル: $related_c"
