@@ -2,11 +2,11 @@
 #include <regex.h>
 
 int main(void) {
-    const char regix[] = "^(070|080|090)-[0-9]{4}-[0-9]{4}$";
+    const char regex[] = "^(070|080|090)-[0-9]{4}-[0-9]{4}$";
     regex_t preg; char str[20]; regmatch_t pm[1];
 
-    if(regcomp(&preg, regix, REG_EXTENDED|REG_NEWLINE) != 0) {
-        printf("regix is not aviable.\n");
+    if(regcomp(&preg, regex, REG_EXTENDED|REG_NEWLINE) != 0) {
+        printf("regex is not aviable.\n");
         return 1;
     }
 
