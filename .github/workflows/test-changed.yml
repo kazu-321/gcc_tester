@@ -53,5 +53,5 @@ jobs:
         run: |
           for file in $TARGET_FILES; do
             echo "🧪 Testing $file ..."
-            python3 test.py"$file"
+            python3 test.py "$file"
           done

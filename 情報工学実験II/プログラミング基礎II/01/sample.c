@@ -1,0 +1,22 @@
+#include <stdio.h>
+#include <regex.h>
+
+int main(void) {
+    const char regix[] = "^(070|080|090)-[0-9]{4}-[0-9]{4}$";
+    regex_t preg; char str[20]; regmatch_t pm[1];
+
+    if(regcomp(&preg, regix, REG_EXTENDED|REG_NEWLINE) != 0) {
+        printf("regix is not aviable.\n");
+        return 1;
+    }
+
+    printf("電話番号を入力してください：\n"); scanf("%s",str);
+    if(regexec(&preg, str, 1, pm, 0) == 0) {
+        printf("入力された電話番号は日本の携帯電話番号です。\n");
+    } else {
+        printf("入力された電話番号は日本の携帯電話番号ではありません。\n");
+    }
+
+    regfree(&preg);
+    return 0;
+}
