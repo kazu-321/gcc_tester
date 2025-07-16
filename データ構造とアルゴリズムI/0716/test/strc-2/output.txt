@@ -1,0 +1,6 @@
+ No. |  Name  | Score | Grade |
+  1  | James  |  78   |   B   |
+  2  |  John  |  92   |   A   |
+  3  |  Mary  |  85   |   A   |
+  4  | Susan  |  78   |   B   |
+  

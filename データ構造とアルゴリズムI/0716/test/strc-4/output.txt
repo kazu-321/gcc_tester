@@ -1,0 +1,16 @@
+Average Score: 78.54
+Standard Deviation: 6.97
+Students with scores 85 or above:
+  Name  | Score |
+ George |  93   |
+  Jacob |  85   |
+   Mark |  85   |
+   Mary |  97   |
+  Betty |  90   |
+  Karen |  86   |
+  Smith |  88   |
+    Ken |  86   |
+ Sharon |  89   |
+  Laura |  98   |
+  Sarah |  87   |
+Total students with scores 85 or above: 11

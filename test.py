@@ -23,7 +23,7 @@ def main():
         sys.exit(1)
 
     exe = f"{cfilename}.out"
-    compile_result = subprocess.run(["gcc", cfile, "-o", exe])
+    compile_result = subprocess.run(["gcc", cfile, "-o", exe, "-lm"])
 
     if compile_result.returncode != 0:
         print("❌ Compilation failed.")
