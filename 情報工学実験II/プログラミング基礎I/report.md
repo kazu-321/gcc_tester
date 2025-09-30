@@ -939,6 +939,6 @@ abcdefghijklmnopqrstuvwxyz
 ### 出力:
 ```
 入力された文字列: abcdefghijklmnopqrstuvwxyz
-ランダムに選ばれた文字: v (位置: 21)
+ランダムに選ばれた文字: i (位置: 8)
 ``` 
 
