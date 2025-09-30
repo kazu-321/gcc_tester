@@ -1,118 +1,148 @@
 import os
 import sys
 import subprocess
+import glob
 import re
+
+TIMEOUT_SEC = 1
+
+def run_exec(exe, input_path=None):
+    try:
+        if input_path:
+            with open(input_path, "r") as infile:
+                result = subprocess.run(
+                    [f"./{exe}"],
+                    stdin=infile,
+                    capture_output=True,
+                    text=True,
+                    timeout=TIMEOUT_SEC,
+                )
+        else:
+            result = subprocess.run(
+                [f"./{exe}"],
+                capture_output=True,
+                text=True,
+                timeout=TIMEOUT_SEC,
+            )
+    except subprocess.TimeoutExpired:
+        return None, "TIMEOUT"
+
+    return result.stdout, None
+
+def compare_with_regex(actual, expected):
+    i = 0
+    j = 0
+    while i < len(actual) and j < len(expected):
+        if expected.startswith("/regex(", j):
+            end = expected.find(")", j + 7)
+            if end == -1:
+                return False
+            pattern = expected[j + 7:end]
+            match = re.search(pattern, actual[i:])
+            if not match:
+                return False
+            i += match.end()
+            j = end + 1
+        else:
+            if actual[i] != expected[j]:
+                return False
+            i += 1
+            j += 1
+    while expected.startswith("/regex(", j):
+        end = expected.find(")", j + 7)
+        if end == -1:
+            return False
+        j = end + 1
+    return i == len(actual) and j == len(expected)
+
+def print_md_block(title, content):
+    print(f"### {title}:")
+    print("```")
+    print(content.strip())
+    print("```")
 
 def main():
     if len(sys.argv) != 2:
-        print("Usage: python test.py <path/to/source.c>")
+        print("Usage: python test.py <path/to/source.c>", file=sys.stderr)
         sys.exit(1)
 
     cfile = sys.argv[1]
-
     if not os.path.isfile(cfile):
-        print(f"❌ File not found: {cfile}")
+        print(f"Error: file not found: {cfile}", file=sys.stderr)
         sys.exit(1)
 
     cfilename = os.path.splitext(os.path.basename(cfile))[0]
-    srcdir = os.path.dirname(cfile)
-    testdir = os.path.join(srcdir, "test", cfilename)
-
-    if not os.path.isdir(testdir):
-        print(f"❌ Test directory not found: {testdir}")
-        sys.exit(1)
-
+    srcdir = os.path.dirname(os.path.abspath(cfile))
     exe = f"{cfilename}.out"
+
+    # --- compile ---
     compile_result = subprocess.run(["gcc", cfile, "-o", exe, "-lm"])
-
     if compile_result.returncode != 0:
-        print("❌ Compilation failed.")
-        sys.exit(1)
+        sys.exit(compile_result.returncode)
 
-    pass_count = 0
-    fail_count = 0
+    base_testdir = os.path.join(srcdir, "test")
+    target_testdir = os.path.join(base_testdir, cfilename)
 
-    for input_file in sorted(os.listdir(testdir)):
-        if not input_file.startswith("input") or not input_file.endswith(".txt"):
-            continue
+    if not os.path.isdir(base_testdir) or not os.path.isdir(target_testdir):
+        actual, err = run_exec(exe)
+        print("## 実行結果")
+        if err == "TIMEOUT":
+            print_md_block("エラー", f"実行が {TIMEOUT_SEC} 秒を超えました")
+        else:
+            print_md_block("出力", actual)
+        os.remove(exe)
+        sys.exit(0)
 
-        num = input_file[len("input"):-len(".txt")]
-        input_path = os.path.join(testdir, input_file)
-        expected_path = os.path.join(testdir, f"output{num}.txt")
+    input_files = sorted(glob.glob(os.path.join(target_testdir, "input*.txt")))
+    output_files = sorted(glob.glob(os.path.join(target_testdir, "output*.txt")))
 
-        if not os.path.isfile(expected_path):
-            print(f"⚠️ Missing output file: {expected_path}")
-            fail_count += 1
-            continue
+    if output_files:
+        if input_files and len(input_files) != len(output_files):
+            print("Error: number of input*.txt and output*.txt files do not match", file=sys.stderr)
+            os.remove(exe)
+            sys.exit(1)
 
-        with open(input_path, "r") as infile, open("temp_output.txt", "w") as outfile:
-            subprocess.run([f"./{exe}"], stdin=infile, stdout=outfile)
+        for i, out_file in enumerate(output_files):
+            inp = input_files[i] if i < len(input_files) else None
+            actual, err = run_exec(exe, inp)
+            expected = open(out_file).read()
 
-        with open("temp_output.txt", "r") as temp_output, open(expected_path, "r") as expected_output:
-            temp_content = temp_output.read()
-            expected_content = expected_output.read()
+            if err == "TIMEOUT":
+                print(f"## ❌ Test {i} failed (TIMEOUT)")
+                if inp:
+                    print_md_block("入力", open(inp).read())
+                print_md_block("エラー", f"実行が {TIMEOUT_SEC} 秒を超えました")
+                continue
 
-            matched = True
-            # 一文字づつ比較
-            i = 0
-            offset = 0
-            while i < len(temp_content):
-                if expected_content[i+offset:i+6+offset] == "/regex":
-                    # /regex()の中身を取得
-                    pattern = expected_content[i+7+offset:expected_content.find(")", i+7+offset)]
-                    match = re.search(pattern, temp_content[i:])
-                    i += match.end()
-                    offset += len(pattern) - match.end() + 8
-                else:
-                    try:
-                        if temp_content[i] != expected_content[i+offset]:
-                            matched = False
-                            break
-                    except IndexError:
-                        matched = False
-                        print(f"⚠️ IndexError: {i} {len(temp_content)} {len(expected_content)}")
-                        break
-                    i += 1
-
-            if matched:
-                print(f"## ✅ Test {num} passed")
-                print("### 入力:")
-                print("```")
-                print(open(input_path).read())
-                print("```")
-
-                print("### 出力:")
-                print("```")
-                print(temp_content)
-                print("```")
-                pass_count += 1
+            if compare_with_regex(actual, expected):
+                print(f"## ✅ Test {i} passed")
             else:
-                print(f"## ❌ Test {num} failed")
-                print("### 入力:")
-                print("```")
-                print(open(input_path).read())
-                print("```")
+                print(f"## ❌ Test {i} failed")
 
-                print("### 出力:")
-                print("```")
-                print(temp_content)
-                print("```")
+            if inp:
+                print_md_block("入力", open(inp).read())
+            print_md_block("出力", actual)
+            if not compare_with_regex(actual, expected):
+                print_md_block("期待", expected)
 
-                print("### 期待:")
-                print("```")
-                print(expected_content)
-                print("```")
-                fail_count += 1
+    elif input_files:
+        for i, inp in enumerate(input_files):
+            actual, err = run_exec(exe, inp)
+            print(f"## 実行 {i}")
+            print_md_block("入力", open(inp).read())
+            if err == "TIMEOUT":
+                print_md_block("エラー", f"実行が {TIMEOUT_SEC} 秒を超えました")
+            else:
+                print_md_block("出力", actual)
+    else:
+        actual, err = run_exec(exe)
+        print("## 実行結果")
+        if err == "TIMEOUT":
+            print_md_block("エラー", f"実行が {TIMEOUT_SEC} 秒を超えました")
+        else:
+            print_md_block("出力", actual)
 
     os.remove(exe)
-    if os.path.exists("temp_output.txt"):
-        os.remove("temp_output.txt")
-
-    print("\n==========================\n")
-    print(f"- ✅ Passed: {pass_count}")
-    print(f"- ❌ Failed: {fail_count}")
-
-    sys.exit(fail_count)
 
 if __name__ == "__main__":
     main()
