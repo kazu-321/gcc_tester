@@ -2,11 +2,11 @@
 #include <string.h>
 
 int main(void) {
-    char str[101];
+    char str[1024];
     int count[10] = {0};
     int i;
 
-    scanf("%100s", str);
+    scanf("%s", str);
 
     for (i = 0; str[i] != '\0'; i++) {
         if (str[i] >= '0' && str[i] <= '9') {

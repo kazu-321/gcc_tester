@@ -2,10 +2,10 @@
 #include <string.h>
 
 int main(void) {
-    char str[256];
+    char str[1024];
     int count = 0;
 
-    scanf("%255s", str);
+    scanf("%s", str);
 
     for (int i = 0; str[i] != '\0'; i++) {
         if (str[i] == 'b') {
